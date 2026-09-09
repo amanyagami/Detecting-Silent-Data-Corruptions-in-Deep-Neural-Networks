@@ -203,3 +203,12 @@ def keep_misclassified(predicted: torch.Tensor, targets: torch.Tensor) -> bool:
     """Selects samples where the model's prediction flipped -- a
     "successful" SDC, which is the event Dr. DNA is being asked to detect."""
     return bool(predicted.eq(targets).sum().item() == 0)
+
+
+def keep_all(_predicted: torch.Tensor, _targets: torch.Tensor) -> bool:
+    """Keeps every sample regardless of prediction correctness. Needed when
+    "correct" isn't a meaningful filter -- e.g. scoring a CIFAR-10-profiled
+    model on SVHN inputs, where its 10-way output has no real relationship
+    to SVHN's digit labels, so gating on classification accuracy would be
+    gating on noise."""
+    return True

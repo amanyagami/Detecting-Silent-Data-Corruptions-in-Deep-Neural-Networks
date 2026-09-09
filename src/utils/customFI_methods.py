@@ -48,6 +48,7 @@ def random_neuron_multi_bit_inj_Aman(pfi: core.fault_injection, layer_ranges, la
     a second, more severe error model alongside the validated single-bit-flip
     one."""
     pfi.set_conv_max(layer_ranges)
+    pfi.multi_bit_positions = bit_positions
 
     batch = random_batch_element(pfi)
     (returned_layer, C, H, W) = random_neuron_location(pfi, layer)

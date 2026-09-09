@@ -11,7 +11,18 @@ from src.utils.customFI_methods import single_bit_flip_func
 def _make_injector():
     # bit_pos/bits are required by the constructor but unused by the
     # _flip_bit(s)_signed_Aman helpers directly under test here.
-    return single_bit_flip_func(model=torch.nn.Identity(), batch_size=1, input_shape=[3, 4, 4], bit_pos=0)
+    #
+    # The dummy model needs at least one parameter: pytorchfi's own
+    # core.fault_injection.__init__ does
+    #   kwargs.get("use_cuda", next(model.parameters()).is_cuda)
+    # and dict.get()'s default argument is evaluated eagerly regardless of
+    # whether the key is present (that's just how Python argument evaluation
+    # works) -- so next(model.parameters()) always runs, and raises
+    # StopIteration on a parameter-free module like nn.Identity(), even when
+    # use_cuda= is passed explicitly.
+    return single_bit_flip_func(
+        model=torch.nn.Conv2d(3, 3, 1), batch_size=1, input_shape=[3, 4, 4], bit_pos=0, use_cuda=False
+    )
 
 
 def test_flip_sign_bit_negates_value():
