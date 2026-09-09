@@ -83,3 +83,32 @@ Fault injected using custom fault injector based on pytorchFI.
 
 The affect of SDC increases the abnormality score of the values. 
  95% TPR threshold = 499. 
+
+See `RESULTS.md` for the broader evaluation (a second dataset and a second error model) and how it compares to the numbers above and to the original paper.
+
+## Development
+
+Install in editable mode with test dependencies:
+
+```bash
+pip install -e ".[dev]"
+git lfs pull   # fetches state_dicts/, correct_data*.pt, tau*.pkl
+```
+
+Run the test suite:
+
+```bash
+pytest -v
+```
+
+`tests/` is a real pytest suite (unit tests for the bit-flip and tau-scoring
+math, plus an end-to-end regression test that the SDC/clean score separation
+holds). It runs in CI (`.github/workflows/test.yml`) on every push and PR.
+The original loose experiment scripts (`resnet_fi.py`, etc.) still exist
+under `experiments/` for manual/interactive use, but aren't part of the
+automated suite.
+
+The reusable pipeline itself lives in `src/detection/pipeline.py`
+(`Profile`, `evaluate`, `register_hooks`, `score_sample`) and
+`src/faults/` (the PyTorchFI-based injectors) -- both scripts and the tests
+import from there rather than duplicating the scoring loop.

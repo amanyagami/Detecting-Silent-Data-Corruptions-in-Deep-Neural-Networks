@@ -1,0 +1,36 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "drdna-detect"
+version = "0.1.0"
+description = "Unofficial reproduction of Dr. DNA (ASPLOS '24): silent-data-corruption detection via the distribution of neuron activations."
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Aman Singh" }]
+requires-python = ">=3.10"
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Science/Research",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = [
+    "torch>=2.2",
+    "torchvision>=0.17",
+    "pytorchfi>=0.6.0",
+    "scipy>=1.11",
+    "pandas>=2.0",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.urls]
+Repository = "https://github.com/amanyagami/Detecting-Silent-Data-Corruptions-in-Deep-Neural-Networks"
+Paper = "https://doi.org/10.1145/3620666.3651349"
+
+[tool.setuptools.packages.find]
+include = ["src*", "DRDNA*"]

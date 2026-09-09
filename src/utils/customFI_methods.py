@@ -42,6 +42,27 @@ def random_neuron_single_bit_inj_Aman(pfi: core.fault_injection, layer_ranges, l
     )
 
 
+def random_neuron_multi_bit_inj_Aman(pfi: core.fault_injection, layer_ranges, layer, fi_c, fi_h, fi_w, bit_positions):
+    """Same targeting as random_neuron_single_bit_inj_Aman, but flips every
+    bit in `bit_positions` (e.g. [1, 9]) on the target neuron instead of one --
+    a second, more severe error model alongside the validated single-bit-flip
+    one."""
+    pfi.set_conv_max(layer_ranges)
+
+    batch = random_batch_element(pfi)
+    (returned_layer, C, H, W) = random_neuron_location(pfi, layer)
+    if returned_layer != layer:
+        print("Problem: fi_layer is not equal to the returned layer")
+    return pfi.declare_neuron_fi(
+        batch=[batch],
+        layer_num=[layer],
+        dim1=[fi_c],
+        dim2=[fi_h],
+        dim3=[fi_w],
+        function=pfi.multi_bit_flip_signed_across_batch_Aman,
+    )
+
+
 
 
 class single_bit_flip_func(core.fault_injection):
@@ -56,6 +77,9 @@ class single_bit_flip_func(core.fault_injection):
             bit_pos =  randint(0,31)
         self.bits = kwargs.get("bits", 8)
         self.LayerRanges = []
+        # second error model: flip every position in this list instead of
+        # just self.bit_pos (see multi_bit_flip_signed_across_batch_Aman)
+        self.multi_bit_positions = kwargs.get("bit_positions", None)
     def set_conv_max(self, data):
         self.LayerRanges = data
 
@@ -102,6 +126,24 @@ class single_bit_flip_func(core.fault_injection):
         logging.info(f"New bits    : {new_binary_representation}")
         logging.info(f"New Number: {new_number}")
         return torch.tensor(new_number, dtype=save_type,device=device)
+
+    def _flip_bits_signed_Aman(self, orig_value, bit_positions):
+        """Same IEEE-754 bit manipulation as _flip_bit_signed_Aman, but flips
+        every position in `bit_positions` on the same value (a multi-bit
+        error model, vs. the single-bit one above)."""
+        save_type = orig_value.dtype
+        packed = struct.pack('!f', orig_value)
+        integer_representation = int.from_bytes(packed, byteorder='big')
+        binary_representation = bin(integer_representation)[2:].zfill(32)
+        bit_list = list(binary_representation)
+        for bit_pos in bit_positions:
+            if bit_pos >= len(bit_list):
+                continue
+            bit_list[bit_pos] = '1' if bit_list[bit_pos] == '0' else '0'
+        new_binary_representation = ''.join(bit_list)
+        new_packed = int(new_binary_representation, 2).to_bytes(4, byteorder='big')
+        new_number = struct.unpack('!f', new_packed)[0]
+        return torch.tensor(new_number, dtype=save_type, device=device)
 
     def _flip_bit_signed(self, orig_value, max_value, bit_pos):
         # quantum value
@@ -203,6 +245,43 @@ class single_bit_flip_func(core.fault_injection):
         self.updateLayer()
         if self.get_current_layer() >= self.get_total_layers():
             self.reset_current_layer()
+
+    def multi_bit_flip_signed_across_batch_Aman(self, module, input_val, output):
+        """Second error model: identical targeting/bookkeeping to
+        single_bit_flip_signed_across_batch_Aman, but flips every bit in
+        self.multi_bit_positions instead of a single self.bit_pos."""
+        corrupt_conv_set = self.get_corrupt_layer()
+
+        if type(corrupt_conv_set) is list:
+            inj_list = list(
+                filter(
+                    lambda x: corrupt_conv_set[x] == self.get_current_layer(),
+                    range(len(corrupt_conv_set)),
+                )
+            )
+            for i in inj_list:
+                self.assert_inj_bounds(index=i)
+                prev_value = output[self.corrupt_batch[i]][self.corrupt_dim1[i]][
+                    self.corrupt_dim2[i]
+                ][self.corrupt_dim3[i]]
+                new_value = self._flip_bits_signed_Aman(prev_value, self.multi_bit_positions)
+                output[self.corrupt_batch[i]][self.corrupt_dim1[i]][
+                    self.corrupt_dim2[i]
+                ][self.corrupt_dim3[i]] = new_value
+        else:
+            if self.get_current_layer() == corrupt_conv_set:
+                prev_value = output[self.corrupt_batch][self.corrupt_dim1][
+                    self.corrupt_dim2
+                ][self.corrupt_dim3]
+                new_value = self._flip_bits_signed_Aman(prev_value, self.multi_bit_positions)
+                output[self.corrupt_batch][self.corrupt_dim1][self.corrupt_dim2][
+                    self.corrupt_dim3
+                ] = new_value
+
+        self.updateLayer()
+        if self.get_current_layer() >= self.get_total_layers():
+            self.reset_current_layer()
+
     # def single_bit_flip_signed_across_batch_Aman(self, module, input_val, output):
     #         corrupt_conv_set = self.corrupt_layer
     #         range_max = self.get_conv_max(self.current_layer)
