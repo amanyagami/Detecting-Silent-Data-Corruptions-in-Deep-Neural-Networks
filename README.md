@@ -1,8 +1,22 @@
 
-# DrDNA: Detecting and Mitigating Soft Errors in Deep Neural Networks
+# Dr. DNA (unofficial reproduction)
 
-This repository contains my own implementation of the paper **"DrDNA: A Detection and Mitigation Framework for Soft Errors in Deep Neural Networks"** published in the ACM Digital Library (paper](https://dl.acm.org/doi/pdf/10.1145/3620666.3651349)) . 
-(No official implementation) 
+An independent, from-scratch reproduction of one detection path from **"Dr. DNA: Combating Silent Data Corruptions in Deep Learning using Distribution of Neuron Activations"** (Ma, Lin, Desmaison, Coburn, Moore, Sankar, Jiao — **ASPLOS '24**, pp. 239-252). No official implementation was available at the time of writing.
+
+> **Scope of this reproduction:** the paper evaluates 3 vision tasks, 5 datasets, 10 models, and 4 error models, plus a mitigation stage. This repo reproduces the **detection** path only, on **ResNet-18 / CIFAR-10** under a **single-bit-flip** error model. It is not a full reproduction of the paper's results.
+
+```bibtex
+@inproceedings{ma2024drdna,
+  title     = {Dr. DNA: Combating Silent Data Corruptions in Deep Learning using Distribution of Neuron Activations},
+  author    = {Ma, Dongning and Lin, Fred and Desmaison, Alban and Coburn, Joel and Moore, Daniel and Sankar, Sriram and Jiao, Xun},
+  booktitle = {Proceedings of the 29th ACM International Conference on Architectural Support for Programming Languages and Operating Systems, Volume 3 (ASPLOS '24)},
+  pages     = {239--252},
+  year      = {2024},
+  doi       = {10.1145/3620666.3651349}
+}
+```
+
+This is an unofficial, independent reproduction and is not affiliated with the original authors or their institutions. Licensed under MIT (see `LICENSE`); please cite the original paper above if you build on the method.
 
 ## Overview
 
