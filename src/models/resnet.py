@@ -1,3 +1,4 @@
+import os
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -112,7 +113,6 @@ class Bottleneck(nn.Module):
         identity = x
 
         out = self.conv1(x)
-        print(out)
         out = self.bn1(out)
         out = self.relu(out)
 
@@ -262,7 +262,10 @@ class ResNet(nn.Module):
 def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
     model = ResNet(block, layers, **kwargs)
     if pretrained:
-        pretrained_path = "/home/local/ASUAD/asing651/ResnetCifar10pytorchFI/state_dicts/resnet18.pt"
+        # NOTE: was a hardcoded absolute path to the original author's machine;
+        # resolved relative to the repo so the package works on any machine.
+        _repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        pretrained_path = os.path.join(_repo_root, "state_dicts", "resnet18.pt")
         state_dict = torch.load(pretrained_path, map_location=device,weights_only=False)
         model.load_state_dict(state_dict)
     return model

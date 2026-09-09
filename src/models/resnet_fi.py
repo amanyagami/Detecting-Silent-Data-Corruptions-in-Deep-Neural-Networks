@@ -1,4 +1,5 @@
 
+import torch
 from src.utils.customFI_methods import single_bit_flip_func
 from models.resnet import resnet18
 from utils.helpers import get_activation
@@ -16,7 +17,7 @@ pfi = single_bit_flip_func(
             net,
             batch_size=batch_size,
             input_shape=[C,H,W],
-            use_cuda=True,
+            use_cuda=torch.cuda.is_available(),  # NOTE: was hardcoded True; crashed on any CPU-only machine
             bits=8,
             random_batch=False
         )

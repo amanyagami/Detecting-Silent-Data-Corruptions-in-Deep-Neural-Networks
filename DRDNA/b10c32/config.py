@@ -8,7 +8,11 @@ Lambda1 = 1
 Lambda2 = 1
 Lambda3 = 1
 
-path = "/home/local/ASUAD/asing651/ResnetCifar10pytorchFI/DRDNA/b10c32"
+import os
+
+# NOTE: was a hardcoded absolute path to the original author's machine;
+# resolved relative to this file so the package works on any machine.
+path = os.path.dirname(os.path.abspath(__file__))
 def update_histogram(value, histogram):
     sorted_keys = list(histogram.keys())
     first_bin_range = sorted_keys[0]

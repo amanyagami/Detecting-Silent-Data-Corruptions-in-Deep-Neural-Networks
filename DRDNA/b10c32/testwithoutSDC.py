@@ -8,7 +8,9 @@ import copy
 import csv
 import pickle
 import pandas as pd
-from data.data import testloader
+# NOTE: removed `from data.data import testloader` -- that module doesn't exist
+# in this repo and testloader is unused (shadowed below by a DataLoader built
+# from correct_data.pt).
 from src.utils.helpers import device
 from torch.utils.data import TensorDataset, DataLoader
 from src.models.resnet import resnet18

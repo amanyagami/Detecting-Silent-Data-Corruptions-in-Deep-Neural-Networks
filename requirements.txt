@@ -1,3 +1,10 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f00152694b03da6681638116f0997a7e0f6405186f44459e3d6556d88dc75230
-size 121
+# Validated in a clean CPU-only environment (Python 3.10).
+# For a CUDA build of torch/torchvision, install from https://pytorch.org/get-started/locally/ instead.
+torch==2.14.0
+torchvision==0.29.0
+pytorchfi==0.6.0
+scipy==1.15.3
+pandas==2.3.3
+matplotlib==3.10.9
+numpy==2.2.6
+pillow==12.3.0

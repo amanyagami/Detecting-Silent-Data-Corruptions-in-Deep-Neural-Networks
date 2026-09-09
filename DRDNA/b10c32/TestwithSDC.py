@@ -209,7 +209,7 @@ if __name__ == '__main__':
                 net,
                 batch_size=batch_size,
                 input_shape=[C,H,W],
-                use_cuda=True,
+                use_cuda=torch.cuda.is_available(),  # NOTE: was hardcoded True; crashed on any CPU-only machine
                 bits=8,
                 random_batch=False,
                 bit_pos=bit_pos,
