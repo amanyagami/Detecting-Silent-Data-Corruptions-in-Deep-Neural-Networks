@@ -5,6 +5,8 @@ An independent, from-scratch reproduction of one detection path from **"Dr. DNA:
 
 > **Scope of this reproduction:** the paper evaluates 3 vision tasks, 5 datasets, 10 models, and 4 error models, plus a mitigation stage. This repo reproduces the **detection** path only, on **ResNet-18 / CIFAR-10** under a **single-bit-flip** error model. It is not a full reproduction of the paper's results.
 
+**[Live project page →](https://amanyagami.github.io/Detecting-Silent-Data-Corruptions-in-Deep-Neural-Networks/)** — includes a real, in-browser demo: the actual trained ResNet-18 running via ONNX Runtime Web, with a real single-bit fault injected into a real activation tensor and scored by the real τ1/τ2/τ3 pipeline, entirely client-side (see `tools/browser_export/`).
+
 ```bibtex
 @inproceedings{ma2024drdna,
   title     = {Dr. DNA: Combating Silent Data Corruptions in Deep Learning using Distribution of Neuron Activations},

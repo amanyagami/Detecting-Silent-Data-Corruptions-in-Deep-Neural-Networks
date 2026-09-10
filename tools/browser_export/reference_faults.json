@@ -1,0 +1,35 @@
+[
+  {
+    "idx": 0,
+    "c": 6,
+    "h": 7,
+    "w": 2,
+    "bit_pos": 1,
+    "orig_value": 0.0,
+    "corrupted_value": 2.0,
+    "faulted_score": 501.3966685706473,
+    "faulted_pred_class_idx": 3
+  },
+  {
+    "idx": 1163,
+    "c": 30,
+    "h": 3,
+    "w": 9,
+    "bit_pos": 0,
+    "orig_value": 0.035447243601083755,
+    "corrupted_value": -0.035447243601083755,
+    "faulted_score": 494.1033351613369,
+    "faulted_pred_class_idx": 8
+  },
+  {
+    "idx": 2326,
+    "c": 50,
+    "h": 10,
+    "w": 10,
+    "bit_pos": 8,
+    "orig_value": 0.07329559326171875,
+    "corrupted_value": 0.036647796630859375,
+    "faulted_score": 496.3746685359214,
+    "faulted_pred_class_idx": 0
+  }
+]
