@@ -131,6 +131,7 @@ class Bottleneck(nn.Module):
 
         return out
 
+
 class ResNet(nn.Module):
     def __init__(
         self,
@@ -156,16 +157,15 @@ class ResNet(nn.Module):
             replace_stride_with_dilation = [False, False, False]
         if len(replace_stride_with_dilation) != 3:
             raise ValueError(
-                "replace_stride_with_dilation should be None "
-                "or a 3-element tuple, got {}".format(replace_stride_with_dilation)
+                "replace_stride_with_dilation should be None or a 3-element tuple, got {}".format(
+                    replace_stride_with_dilation
+                )
             )
         self.groups = groups
         self.base_width = width_per_group
 
         # CIFAR10: kernel_size 7 -> 3, stride 2 -> 1, padding 3->1
-        self.conv1 = nn.Conv2d(
-            3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False
-        )
+        self.conv1 = nn.Conv2d(3, self.inplanes, kernel_size=3, stride=1, padding=1, bias=False)
         # END
 
         self.bn1 = norm_layer(self.inplanes)
@@ -259,6 +259,7 @@ class ResNet(nn.Module):
 
         return x
 
+
 def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
     model = ResNet(block, layers, **kwargs)
     if pretrained:
@@ -266,7 +267,7 @@ def _resnet(arch, block, layers, pretrained, progress, device, **kwargs):
         # resolved relative to the repo so the package works on any machine.
         _repo_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
         pretrained_path = os.path.join(_repo_root, "state_dicts", "resnet18.pt")
-        state_dict = torch.load(pretrained_path, map_location=device,weights_only=False)
+        state_dict = torch.load(pretrained_path, map_location=device, weights_only=False)
         model.load_state_dict(state_dict)
     return model
 
@@ -277,10 +278,7 @@ def resnet18(pretrained=False, progress=True, device="cpu", **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet(
-        "resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs
-    )
-
+    return _resnet("resnet18", BasicBlock, [2, 2, 2, 2], pretrained, progress, device, **kwargs)
 
 
 def resnet34(pretrained=False, progress=True, device="cpu", **kwargs):
@@ -289,9 +287,7 @@ def resnet34(pretrained=False, progress=True, device="cpu", **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet(
-        "resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, device, **kwargs
-    )
+    return _resnet("resnet34", BasicBlock, [3, 4, 6, 3], pretrained, progress, device, **kwargs)
 
 
 def resnet50(pretrained=False, progress=True, device="cpu", **kwargs):
@@ -300,7 +296,4 @@ def resnet50(pretrained=False, progress=True, device="cpu", **kwargs):
         pretrained (bool): If True, returns a model pre-trained on ImageNet
         progress (bool): If True, displays a progress bar of the download to stderr
     """
-    return _resnet(
-        "resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, device, **kwargs
-    )
-
+    return _resnet("resnet50", Bottleneck, [3, 4, 6, 3], pretrained, progress, device, **kwargs)
