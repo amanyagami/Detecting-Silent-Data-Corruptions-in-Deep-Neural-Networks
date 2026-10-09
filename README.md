@@ -73,7 +73,7 @@ What this says:
 | `pytorchfi` fault injector | Small in-process injector (`drdna.faults`) with an involution test |
 | Pickled profiles and hand-edited absolute paths | Profiles are computed in memory, seeds are explicit |
 
-The original scripts remain under `DRDNA/` and `src/` untouched for comparison. tau2 uses a
+The original scripts remain under `DRDNA/` and `src/` for comparison; their only change is a formatting-only `ruff format` commit. tau2 uses a
 bin-normalized EMD (0-1) rather than activation units; this is a documented deviation.
 
 ## Limitations
