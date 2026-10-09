@@ -1,0 +1,14 @@
+repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    rev: 0.8.22
+    hooks:
+      - id: uv-lock
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.13.2
+    hooks:
+      # Only the maintained package; the legacy scripts are kept as published.
+      - id: ruff-check
+        args: [--fix]
+        files: ^(src/drdna|tests/test_drdna\.py|scripts)/?
+      - id: ruff-format
+        files: ^(src/drdna|tests/test_drdna\.py|scripts)/?

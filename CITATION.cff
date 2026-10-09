@@ -1,0 +1,31 @@
+cff-version: 1.2.0
+message: "If you use this reproduction, please also cite the original Dr. DNA paper."
+title: "Dr. DNA (unofficial reproduction): silent data corruption detection"
+type: software
+authors:
+  - family-names: Singh
+    given-names: Aman
+license: MIT
+repository-code: "https://github.com/amanyagami/Detecting-Silent-Data-Corruptions-in-Deep-Neural-Networks"
+references:
+  - type: conference-paper
+    title: "Dr. DNA: Combating Silent Data Corruptions in Deep Learning using Distribution of Neuron Activations"
+    authors:
+      - family-names: Ma
+        given-names: Dongning
+      - family-names: Lin
+        given-names: Fred
+      - family-names: Desmaison
+        given-names: Alban
+      - family-names: Coburn
+        given-names: Joel
+      - family-names: Moore
+        given-names: Daniel
+      - family-names: Sankar
+        given-names: Sriram
+      - family-names: Jiao
+        given-names: Xun
+    collection-title: "Proceedings of ASPLOS '24, Volume 3"
+    pages: "239-252"
+    year: 2024
+    doi: "10.1145/3620666.3651349"

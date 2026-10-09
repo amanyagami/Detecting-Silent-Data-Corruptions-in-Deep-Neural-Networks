@@ -1,8 +1,36 @@
-# Dr. DNA (unofficial reproduction) - detection path
+<div align="center">
 
-Unofficial reproduction of the detection path of **"Dr. DNA: Combating Silent Data Corruptions in
-Deep Learning using Distribution of Neuron Activations"** (Ma et al., ASPLOS '24) on ResNet-18 /
-CIFAR-10 with a single-bit-flip error model. Not affiliated with the authors; please cite the paper.
+# Dr. DNA
+
+**Catching silent data corruptions in neural networks from the distribution of their neuron activations.**
+An unofficial, vectorized reproduction of the detection path of the ASPLOS '24 paper, with a leakage-free evaluation.
+
+[![CI](https://github.com/amanyagami/Detecting-Silent-Data-Corruptions-in-Deep-Neural-Networks/actions/workflows/ci.yml/badge.svg)](https://github.com/amanyagami/Detecting-Silent-Data-Corruptions-in-Deep-Neural-Networks/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-yellow.svg)](LICENSE)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+[![uv](https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json)](https://github.com/astral-sh/uv)
+[![Paper](https://img.shields.io/badge/ASPLOS'24-10.1145%2F3620666.3651349-blue)](https://doi.org/10.1145/3620666.3651349)
+
+<img src="results/detection.png" alt="Share of silent data corruptions detected per detector variant, at a 1% false-alarm budget" width="900">
+
+</div>
+
+A single flipped bit in a neuron's output can silently change a network's prediction. Dr. DNA profiles
+what healthy activations look like, scores how abnormal a run is, layer by layer, and flags the run
+when the score crosses a threshold calibrated on clean data. This repository reproduces that
+detection path on **ResNet-18 / CIFAR-10** with a **single-bit-flip** error model, and reports the
+result with the controls the original scripts lacked.
+
+```mermaid
+flowchart LR
+    P[Profile<br/>1,000 train images] --> T["τ1 per-neuron histograms<br/>τ2 per-layer histogram<br/>τ3 extreme-neuron locations"]
+    T --> S[Score each layer<br/>cumulative with depth]
+    I[Inject single-bit flip<br/>layer · neuron · bit] --> S
+    C[Calibrate threshold<br/>clean held-out images] --> D{score above<br/>threshold?}
+    S --> D
+    D -->|yes| F[SDC flagged]
+    D -->|no| K[Pass]
+```
 
 ## Quick start
 
